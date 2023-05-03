@@ -5,21 +5,22 @@ class Table:
     def __init__(self, table_number: int, capacity: int) -> None:
         self.table_number: int = table_number
         self.capacity: int = capacity
-        self.reservation: Optional[Dict[str, Union[str, datetime.datetime]]] = None
+        self.reservation: Optional[Dict[str, Union[str, datetime.datetime, datetime.datetime]]] = None
 
-    def reserve(self, name: str, time: str) -> None:
+    def reserve(self, name: str, reservation_time: datetime, current_time: datetime) -> None:
         self.reservation = {
             "name": name,
-            "time": time
+            "curent_time": current_time,
+            "reservation_time": reservation_time, 
         }
-        print(f"Table {self.table_number} reserved for {name} at {time}.")
+        print(f"Table {self.table_number} reserved for {name} at {reservation_time}.")
 
     def is_reserved(self) -> bool:
         return self.reservation is not None
 
     def reservation_info(self) -> str:
         if self.reservation:
-            return f"Reserved by {self.reservation['name']} at {self.reservation['time']}"
+            return f"Reserved by {self.reservation['name']} at {self.reservation['reservation_time']}"
         else:
             return "Not reserved"
 
@@ -33,10 +34,10 @@ class Restaurant:
             "group": [Table(table+26, 8) for table in range(2)]
         }
 
-    def reserve_table(self, name: str, table_number: int) -> None:
+    def reserve_table(self, name: str, reservation_time: datetime, table_number: int) -> None:
         table: Optional[Table] = self.get_table(table_number)
         if table and not table.is_reserved():
-            table.reserve(name, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            table.reserve(name, reservation_time, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
         else:
             print("Table is already reserved or does not exist.")
 
@@ -119,7 +120,8 @@ def main() -> None:
             restaurant.suggest_table(group_size)
             table_number: int = int(input("Enter table number: "))
             full_name: str = f"{first_name} {last_name}"
-            restaurant.reserve_table(full_name, table_number)
+            reservation_time = input('What time would you like to reserve a table? Please provide the date and time in the format YYYY-MM-DD HH:MM.: ')
+            restaurant.reserve_table(full_name, reservation_time, table_number)
         elif choice == "2":
             restaurant.show_tables()
         elif choice == "3":
