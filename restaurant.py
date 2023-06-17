@@ -12,6 +12,18 @@ class Restaurant:
             "group": [Table(table+26, 8) for table in range(2)]
         }
 
+    def get_reservation_time() -> datetime:
+        while True:
+            date_input = input('What time would you like to reserve a table? Please provide the date and time in the format YYYY-MM-DD HH:MM: ')
+            try:
+                reservation_time = datetime.strptime(date_input, "%Y-%m-%d %H:%M")
+                if reservation_time > datetime.now():
+                    return reservation_time
+                else:
+                    print("The reservation time cannot be in the past. Please try again.")
+            except ValueError:
+                print("That's not a valid date format. Please try again.")
+
     def reserve_table(self, name: str, reservation_time: datetime, table_number: int) -> None:
         table: Optional[Table] = self.get_table(table_number)
         if table and not table.is_reserved():

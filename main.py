@@ -20,7 +20,8 @@ def main() -> None:
             print(restaurant.suggest_table(group_size))
             table_number: int = int(input("Enter table number: "))
             full_name: str = f"{first_name} {last_name}"
-            reservation_time = datetime.strptime(input('What time would you like to reserve a table? Please provide the date and time in the format YYYY-MM-DD HH:MM: '), "%Y-%m-%d %H:%M")
+            reservation_time = Restaurant.get_reservation_time()
+            # reservation_time = datetime.strptime(input('What time would you like to reserve a table? Please provide the date and time in the format YYYY-MM-DD HH:MM: '), "%Y-%m-%d %H:%M")
             print(restaurant.reserve_table(full_name, reservation_time, table_number))
         elif choice == "2":
             tables = restaurant.show_tables()
